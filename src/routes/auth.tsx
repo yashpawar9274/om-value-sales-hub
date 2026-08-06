@@ -42,13 +42,19 @@ function AuthPage() {
     setLoading(true);
     const { error } = await supabase.auth.signInWithPassword({ email: email.trim(), password });
     setLoading(false);
-    if (error) return toast.error(error.message);
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
     navigate({ to: "/dashboard", replace: true });
   }
 
   async function handleSignUp(e: React.FormEvent) {
     e.preventDefault();
-    if (!fullName.trim()) return toast.error("Please enter your full name");
+    if (!fullName.trim()) {
+      toast.error("Please enter your full name");
+      return;
+    }
     setLoading(true);
     const { data, error } = await supabase.auth.signUp({
       email: email.trim(),
@@ -59,7 +65,10 @@ function AuthPage() {
       },
     });
     setLoading(false);
-    if (error) return toast.error(error.message);
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
     if (!data.session) {
       toast.success("Account created. Check your email to confirm, then sign in.");
       setMode("signin");
@@ -72,19 +81,29 @@ function AuthPage() {
     const result = await lovable.auth.signInWithOAuth("google", {
       redirect_uri: window.location.origin,
     });
-    if (result.error) return toast.error("Google sign-in failed. Please try again.");
+    if (result.error) {
+      toast.error("Google sign-in failed. Please try again.");
+      return;
+    }
     if (result.redirected) return;
     navigate({ to: "/dashboard", replace: true });
   }
 
   async function handleForgot() {
-    if (!email.trim()) return toast.error("Enter your email first");
+    if (!email.trim()) {
+      toast.error("Enter your email first");
+      return;
+    }
     const { error } = await supabase.auth.resetPasswordForEmail(email.trim(), {
       redirectTo: `${window.location.origin}/reset-password`,
     });
-    if (error) return toast.error(error.message);
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
     toast.success("Password reset link sent to your email");
   }
+
 
   return (
     <div className="flex min-h-screen flex-col bg-background">
