@@ -14,16 +14,405 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      activity_logs: {
+        Row: {
+          action: string
+          actor_id: string | null
+          created_at: string
+          detail: string | null
+          id: string
+          lead_id: string | null
+        }
+        Insert: {
+          action: string
+          actor_id?: string | null
+          created_at?: string
+          detail?: string | null
+          id?: string
+          lead_id?: string | null
+        }
+        Update: {
+          action?: string
+          actor_id?: string | null
+          created_at?: string
+          detail?: string | null
+          id?: string
+          lead_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "activity_logs_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "leads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      app_settings: {
+        Row: {
+          key: string
+          updated_at: string
+          value: Json
+        }
+        Insert: {
+          key: string
+          updated_at?: string
+          value?: Json
+        }
+        Update: {
+          key?: string
+          updated_at?: string
+          value?: Json
+        }
+        Relationships: []
+      }
+      bookings: {
+        Row: {
+          agreement_status: string
+          booking_amount: number
+          booking_date: string
+          created_at: string
+          created_by: string
+          document_urls: string[]
+          id: string
+          lead_id: string
+          notes: string | null
+          payment_status: Database["public"]["Enums"]["payment_status"]
+          project_name: string | null
+          received_amount: number
+          unit_number: string | null
+          updated_at: string
+        }
+        Insert: {
+          agreement_status?: string
+          booking_amount?: number
+          booking_date?: string
+          created_at?: string
+          created_by: string
+          document_urls?: string[]
+          id?: string
+          lead_id: string
+          notes?: string | null
+          payment_status?: Database["public"]["Enums"]["payment_status"]
+          project_name?: string | null
+          received_amount?: number
+          unit_number?: string | null
+          updated_at?: string
+        }
+        Update: {
+          agreement_status?: string
+          booking_amount?: number
+          booking_date?: string
+          created_at?: string
+          created_by?: string
+          document_urls?: string[]
+          id?: string
+          lead_id?: string
+          notes?: string | null
+          payment_status?: Database["public"]["Enums"]["payment_status"]
+          project_name?: string | null
+          received_amount?: number
+          unit_number?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "bookings_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "leads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      follow_ups: {
+        Row: {
+          assigned_to: string | null
+          completed_at: string | null
+          created_at: string
+          created_by: string
+          due_at: string
+          id: string
+          lead_id: string
+          notes: string | null
+          outcome: string | null
+          status: Database["public"]["Enums"]["followup_status"]
+          updated_at: string
+        }
+        Insert: {
+          assigned_to?: string | null
+          completed_at?: string | null
+          created_at?: string
+          created_by: string
+          due_at: string
+          id?: string
+          lead_id: string
+          notes?: string | null
+          outcome?: string | null
+          status?: Database["public"]["Enums"]["followup_status"]
+          updated_at?: string
+        }
+        Update: {
+          assigned_to?: string | null
+          completed_at?: string | null
+          created_at?: string
+          created_by?: string
+          due_at?: string
+          id?: string
+          lead_id?: string
+          notes?: string | null
+          outcome?: string | null
+          status?: Database["public"]["Enums"]["followup_status"]
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "follow_ups_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "leads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      lead_notes: {
+        Row: {
+          created_at: string
+          created_by: string
+          id: string
+          lead_id: string
+          note: string
+        }
+        Insert: {
+          created_at?: string
+          created_by: string
+          id?: string
+          lead_id: string
+          note: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string
+          id?: string
+          lead_id?: string
+          note?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lead_notes_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "leads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      leads: {
+        Row: {
+          alternate_mobile: string | null
+          assigned_to: string | null
+          budget: number | null
+          configuration: string | null
+          created_at: string
+          created_by: string
+          customer_name: string
+          email: string | null
+          id: string
+          location: string | null
+          mobile: string
+          notes: string | null
+          priority: Database["public"]["Enums"]["lead_priority"]
+          source: Database["public"]["Enums"]["lead_source"]
+          status: Database["public"]["Enums"]["lead_status"]
+          updated_at: string
+        }
+        Insert: {
+          alternate_mobile?: string | null
+          assigned_to?: string | null
+          budget?: number | null
+          configuration?: string | null
+          created_at?: string
+          created_by: string
+          customer_name: string
+          email?: string | null
+          id?: string
+          location?: string | null
+          mobile: string
+          notes?: string | null
+          priority?: Database["public"]["Enums"]["lead_priority"]
+          source?: Database["public"]["Enums"]["lead_source"]
+          status?: Database["public"]["Enums"]["lead_status"]
+          updated_at?: string
+        }
+        Update: {
+          alternate_mobile?: string | null
+          assigned_to?: string | null
+          budget?: number | null
+          configuration?: string | null
+          created_at?: string
+          created_by?: string
+          customer_name?: string
+          email?: string | null
+          id?: string
+          location?: string | null
+          mobile?: string
+          notes?: string | null
+          priority?: Database["public"]["Enums"]["lead_priority"]
+          source?: Database["public"]["Enums"]["lead_source"]
+          status?: Database["public"]["Enums"]["lead_status"]
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          email: string | null
+          full_name: string
+          id: string
+          is_active: boolean
+          phone: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          email?: string | null
+          full_name?: string
+          id: string
+          is_active?: boolean
+          phone?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          email?: string | null
+          full_name?: string
+          id?: string
+          is_active?: boolean
+          phone?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      site_visits: {
+        Row: {
+          assigned_to: string | null
+          created_at: string
+          created_by: string
+          feedback: string | null
+          id: string
+          interested_unit: string | null
+          lead_id: string
+          location: string | null
+          next_action: string | null
+          project_name: string | null
+          status: Database["public"]["Enums"]["visit_status"]
+          updated_at: string
+          visit_at: string
+        }
+        Insert: {
+          assigned_to?: string | null
+          created_at?: string
+          created_by: string
+          feedback?: string | null
+          id?: string
+          interested_unit?: string | null
+          lead_id: string
+          location?: string | null
+          next_action?: string | null
+          project_name?: string | null
+          status?: Database["public"]["Enums"]["visit_status"]
+          updated_at?: string
+          visit_at: string
+        }
+        Update: {
+          assigned_to?: string | null
+          created_at?: string
+          created_by?: string
+          feedback?: string | null
+          id?: string
+          interested_unit?: string | null
+          lead_id?: string
+          location?: string | null
+          next_action?: string | null
+          project_name?: string | null
+          status?: Database["public"]["Enums"]["visit_status"]
+          updated_at?: string
+          visit_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "site_visits_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "leads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      can_access_lead: { Args: { _lead_id: string }; Returns: boolean }
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
+      is_staff_manager: { Args: { _user_id: string }; Returns: boolean }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "manager" | "executive"
+      followup_status: "pending" | "completed" | "missed" | "rescheduled"
+      lead_priority: "high" | "medium" | "low"
+      lead_source:
+        | "facebook"
+        | "instagram"
+        | "google"
+        | "whatsapp"
+        | "walk_in"
+        | "reference"
+        | "property_portal"
+        | "others"
+      lead_status:
+        | "new"
+        | "contacted"
+        | "interested"
+        | "follow_up"
+        | "site_visit_scheduled"
+        | "visited"
+        | "negotiation"
+        | "booked"
+        | "lost"
+        | "hold"
+      payment_status: "pending" | "partial" | "completed" | "cancelled"
+      visit_status: "scheduled" | "completed" | "cancelled" | "no_show"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +539,34 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "manager", "executive"],
+      followup_status: ["pending", "completed", "missed", "rescheduled"],
+      lead_priority: ["high", "medium", "low"],
+      lead_source: [
+        "facebook",
+        "instagram",
+        "google",
+        "whatsapp",
+        "walk_in",
+        "reference",
+        "property_portal",
+        "others",
+      ],
+      lead_status: [
+        "new",
+        "contacted",
+        "interested",
+        "follow_up",
+        "site_visit_scheduled",
+        "visited",
+        "negotiation",
+        "booked",
+        "lost",
+        "hold",
+      ],
+      payment_status: ["pending", "partial", "completed", "cancelled"],
+      visit_status: ["scheduled", "completed", "cancelled", "no_show"],
+    },
   },
 } as const
