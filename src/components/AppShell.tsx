@@ -79,11 +79,17 @@ export function AppShell({
         <header className="no-print sticky top-0 z-30 gradient-hero px-4 pb-5 pt-6 text-primary-foreground shadow-[var(--shadow-card)]">
           <div className="mx-auto flex max-w-4xl items-start justify-between gap-3">
             <div>
+              {back ? (
+                <Link to={back} className="mb-1 inline-flex items-center gap-1 text-xs font-semibold opacity-85">
+                  <ChevronLeft className="size-3.5" /> Back
+                </Link>
+              ) : null}
               <h1 className="text-xl font-bold tracking-tight">{title}</h1>
               {subtitle ? <p className="mt-0.5 text-sm opacity-85">{subtitle}</p> : null}
             </div>
             {action}
           </div>
+
         </header>
 
         <main className="mx-auto max-w-4xl px-4 pb-28 pt-4 lg:pb-10">{children}</main>
