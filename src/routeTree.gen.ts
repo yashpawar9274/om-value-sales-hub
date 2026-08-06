@@ -16,6 +16,7 @@ import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as AuthenticatedBookingsRouteImport } from './routes/_authenticated/bookings'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedFollowupsRouteImport } from './routes/_authenticated/followups'
+import { Route as AuthenticatedReportsRouteImport } from './routes/_authenticated/reports'
 import { Route as AuthenticatedVisitsRouteImport } from './routes/_authenticated/visits'
 import { Route as AuthenticatedLeadsIndexRouteImport } from './routes/_authenticated/leads/index'
 import { Route as AuthenticatedLeadsLeadIdRouteImport } from './routes/_authenticated/leads/$leadId'
@@ -55,6 +56,11 @@ const AuthenticatedFollowupsRoute = AuthenticatedFollowupsRouteImport.update({
   path: '/followups',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedReportsRoute = AuthenticatedReportsRouteImport.update({
+  id: '/reports',
+  path: '/reports',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedVisitsRoute = AuthenticatedVisitsRouteImport.update({
   id: '/visits',
   path: '/visits',
@@ -84,6 +90,7 @@ export interface FileRoutesByFullPath {
   '/bookings': typeof AuthenticatedBookingsRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/followups': typeof AuthenticatedFollowupsRoute
+  '/reports': typeof AuthenticatedReportsRoute
   '/visits': typeof AuthenticatedVisitsRoute
   '/leads/$leadId': typeof AuthenticatedLeadsLeadIdRoute
   '/leads/new': typeof AuthenticatedLeadsNewRoute
@@ -96,6 +103,7 @@ export interface FileRoutesByTo {
   '/bookings': typeof AuthenticatedBookingsRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/followups': typeof AuthenticatedFollowupsRoute
+  '/reports': typeof AuthenticatedReportsRoute
   '/visits': typeof AuthenticatedVisitsRoute
   '/leads/$leadId': typeof AuthenticatedLeadsLeadIdRoute
   '/leads/new': typeof AuthenticatedLeadsNewRoute
@@ -110,6 +118,7 @@ export interface FileRoutesById {
   '/_authenticated/bookings': typeof AuthenticatedBookingsRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/followups': typeof AuthenticatedFollowupsRoute
+  '/_authenticated/reports': typeof AuthenticatedReportsRoute
   '/_authenticated/visits': typeof AuthenticatedVisitsRoute
   '/_authenticated/leads/$leadId': typeof AuthenticatedLeadsLeadIdRoute
   '/_authenticated/leads/new': typeof AuthenticatedLeadsNewRoute
@@ -124,6 +133,7 @@ export interface FileRouteTypes {
     | '/bookings'
     | '/dashboard'
     | '/followups'
+    | '/reports'
     | '/visits'
     | '/leads/$leadId'
     | '/leads/new'
@@ -136,6 +146,7 @@ export interface FileRouteTypes {
     | '/bookings'
     | '/dashboard'
     | '/followups'
+    | '/reports'
     | '/visits'
     | '/leads/$leadId'
     | '/leads/new'
@@ -149,6 +160,7 @@ export interface FileRouteTypes {
     | '/_authenticated/bookings'
     | '/_authenticated/dashboard'
     | '/_authenticated/followups'
+    | '/_authenticated/reports'
     | '/_authenticated/visits'
     | '/_authenticated/leads/$leadId'
     | '/_authenticated/leads/new'
@@ -213,6 +225,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedFollowupsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/reports': {
+      id: '/_authenticated/reports'
+      path: '/reports'
+      fullPath: '/reports'
+      preLoaderRoute: typeof AuthenticatedReportsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/visits': {
       id: '/_authenticated/visits'
       path: '/visits'
@@ -248,6 +267,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedBookingsRoute: typeof AuthenticatedBookingsRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedFollowupsRoute: typeof AuthenticatedFollowupsRoute
+  AuthenticatedReportsRoute: typeof AuthenticatedReportsRoute
   AuthenticatedVisitsRoute: typeof AuthenticatedVisitsRoute
   AuthenticatedLeadsLeadIdRoute: typeof AuthenticatedLeadsLeadIdRoute
   AuthenticatedLeadsNewRoute: typeof AuthenticatedLeadsNewRoute
@@ -258,6 +278,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedBookingsRoute: AuthenticatedBookingsRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedFollowupsRoute: AuthenticatedFollowupsRoute,
+  AuthenticatedReportsRoute: AuthenticatedReportsRoute,
   AuthenticatedVisitsRoute: AuthenticatedVisitsRoute,
   AuthenticatedLeadsLeadIdRoute: AuthenticatedLeadsLeadIdRoute,
   AuthenticatedLeadsNewRoute: AuthenticatedLeadsNewRoute,
