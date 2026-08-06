@@ -1,0 +1,1 @@
+import{r as e}from"./useRouter-Dpb7RwMI.js";import{p as t}from"./index-1ChpP-_F.js";var n=e(),r=()=>(0,n.jsx)(t,{});export{r as component};
