@@ -79,7 +79,7 @@ export function LeadForm({
   onSubmit: () => void;
   submitting: boolean;
   submitLabel: string;
-  duplicateWarning?: string | null;
+  duplicateWarning?: string | null | undefined;
 }) {
   const [errors, setErrors] = useState<Record<string, string>>({});
 
