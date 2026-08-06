@@ -64,7 +64,7 @@ function NewLead() {
         assigned_to: values.assigned_to || user?.id || null,
         location: values.location.trim() || null,
         notes: values.notes.trim() || null,
-        created_by: user?.id ?? null,
+        created_by: user!.id,
       })
       .select("id")
       .single();
@@ -74,11 +74,12 @@ function NewLead() {
       return;
     }
     await supabase.from("activity_logs").insert({
-      user_id: user?.id ?? null,
+      actor_id: user?.id ?? null,
       lead_id: data.id,
       action: "Lead created",
       detail: values.customer_name.trim(),
     });
+
     queryClient.invalidateQueries();
     toast.success("Lead added");
     navigate({ to: "/leads/$leadId", params: { leadId: data.id }, replace: true });
