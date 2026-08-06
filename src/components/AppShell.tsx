@@ -34,13 +34,16 @@ export function AppShell({
   title,
   subtitle,
   action,
+  back,
   children,
 }: {
   title: string;
-  subtitle?: string;
+  subtitle?: string | undefined;
   action?: ReactNode;
+  back?: "/dashboard" | "/leads" | "/followups" | "/visits" | "/bookings" | "/reports" | "/settings" | undefined;
   children: ReactNode;
 }) {
+
   const pathname = useRouterState({ select: (s) => s.location.pathname });
 
   return (
