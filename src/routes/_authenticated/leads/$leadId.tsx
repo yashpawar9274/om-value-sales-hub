@@ -120,7 +120,10 @@ function LeadDetail() {
 
   async function changeStatus(status: string) {
     const { error } = await supabase.from("leads").update({ status: status as Lead["status"] }).eq("id", leadId);
-    if (error) return toast.error(error.message);
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
     await supabase.from("activity_logs").insert({
       actor_id: user?.id ?? null,
       lead_id: leadId,
@@ -132,15 +135,23 @@ function LeadDetail() {
   }
 
   async function addNote() {
-    if (!note.trim()) return;
+    if (!note.trim()) {
+      return;
+    }
     const { error } = await supabase.from("lead_notes").insert({ lead_id: leadId, note: note.trim(), created_by: user!.id });
-    if (error) return toast.error(error.message);
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
     setNote("");
     refresh();
   }
 
   async function addFollowUp() {
-    if (!followDate) return toast.error("Pick a date and time");
+    if (!followDate) {
+      toast.error("Pick a date and time");
+      return;
+    }
     const { error } = await supabase.from("follow_ups").insert({
       lead_id: leadId,
       due_at: new Date(followDate).toISOString(),
@@ -148,7 +159,10 @@ function LeadDetail() {
       created_by: user!.id,
       assigned_to: lead?.assigned_to ?? user!.id,
     });
-    if (error) return toast.error(error.message);
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
     setFollowDate("");
     setFollowNote("");
     toast.success("Follow-up scheduled");
@@ -160,12 +174,18 @@ function LeadDetail() {
       .from("follow_ups")
       .update({ status, completed_at: new Date().toISOString() })
       .eq("id", id);
-    if (error) return toast.error(error.message);
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
     refresh();
   }
 
   async function addVisit() {
-    if (!visitDate) return toast.error("Pick a visit date and time");
+    if (!visitDate) {
+      toast.error("Pick a visit date and time");
+      return;
+    }
     const { error } = await supabase.from("site_visits").insert({
       lead_id: leadId,
       visit_at: new Date(visitDate).toISOString(),
@@ -174,7 +194,10 @@ function LeadDetail() {
       created_by: user!.id,
       assigned_to: lead?.assigned_to ?? user!.id,
     });
-    if (error) return toast.error(error.message);
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
     setVisitDate("");
     setVisitProject("");
     setVisitLocation("");
@@ -184,7 +207,10 @@ function LeadDetail() {
 
   async function setVisitStatus(id: string, status: VisitStatus) {
     const { error } = await supabase.from("site_visits").update({ status }).eq("id", id);
-    if (error) return toast.error(error.message);
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
     refresh();
   }
 
