@@ -201,21 +201,24 @@ export function LeadForm({
             </SelectContent>
           </Select>
         </Field>
-        <Field label="Assigned executive">
-          <Select value={value.assigned_to || "unassigned"} onValueChange={(v) => set({ assigned_to: v === "unassigned" ? "" : v })}>
-            <SelectTrigger>
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="unassigned">Unassigned</SelectItem>
-              {team.map((t) => (
-                <SelectItem key={t.id} value={t.id}>
-                  {t.full_name || t.email || "Team member"}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </Field>
+        {canAssign ? (
+          <Field label="Assigned executive">
+            <Select value={value.assigned_to || "unassigned"} onValueChange={(v) => set({ assigned_to: v === "unassigned" ? "" : v })}>
+              <SelectTrigger>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="unassigned">Unassigned</SelectItem>
+                {team.map((t) => (
+                  <SelectItem key={t.id} value={t.id}>
+                    {t.full_name || t.email || "Team member"}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </Field>
+        ) : null}
+
         <div className="sm:col-span-2">
           <Field label="Location / area">
             <Input value={value.location} maxLength={160} onChange={(e) => set({ location: e.target.value })} />
