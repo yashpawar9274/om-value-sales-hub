@@ -24,10 +24,11 @@ export const Route = createFileRoute("/_authenticated/leads/new")({
 function NewLead() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const { user } = useAuth();
+  const { user, isManager } = useAuth();
   const [values, setValues] = useState<LeadFormValues>(emptyLead());
   const [saving, setSaving] = useState(false);
   const [duplicate, setDuplicate] = useState<string | null>(null);
+
 
   useEffect(() => {
     const mobile = values.mobile.trim();
