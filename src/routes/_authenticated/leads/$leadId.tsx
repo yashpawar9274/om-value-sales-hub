@@ -46,7 +46,7 @@ export const Route = createFileRoute("/_authenticated/leads/$leadId")({
 
 function LeadDetail() {
   const { leadId } = Route.useParams();
-  const { user } = useAuth();
+  const { user, isManager } = useAuth();
   const queryClient = useQueryClient();
   const [note, setNote] = useState("");
   const [editing, setEditing] = useState(false);
@@ -239,6 +239,7 @@ function LeadDetail() {
           onSubmit={() => saveLead.mutate(form)}
           submitting={saveLead.isPending}
           submitLabel="Save changes"
+          canAssign={isManager}
         />
         <Button variant="ghost" className="mt-3 w-full" onClick={() => setEditing(false)}>
           Cancel
