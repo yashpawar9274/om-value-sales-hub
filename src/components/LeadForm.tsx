@@ -73,6 +73,7 @@ export function LeadForm({
   submitting,
   submitLabel,
   duplicateWarning,
+  canAssign = true,
 }: {
   value: LeadFormValues;
   onChange: (next: LeadFormValues) => void;
@@ -80,16 +81,19 @@ export function LeadForm({
   submitting: boolean;
   submitLabel: string;
   duplicateWarning?: string | null | undefined;
+  canAssign?: boolean;
 }) {
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   const { data: team = [] } = useQuery({
     queryKey: ["team"],
+    enabled: canAssign,
     queryFn: async () => {
       const { data } = await supabase.from("profiles").select("id, full_name, email").order("full_name");
       return data ?? [];
     },
   });
+
 
   const set = (patch: Partial<LeadFormValues>) => onChange({ ...value, ...patch });
 
