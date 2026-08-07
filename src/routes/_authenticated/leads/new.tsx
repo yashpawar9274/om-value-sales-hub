@@ -95,7 +95,9 @@ function NewLead() {
         submitting={saving}
         submitLabel="Save lead"
         duplicateWarning={duplicate}
+        canAssign={isManager}
       />
+
     </AppShell>
   );
 }
