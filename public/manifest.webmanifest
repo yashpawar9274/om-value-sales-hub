@@ -1,0 +1,22 @@
+{
+  "name": "OM Value Homes CRM",
+  "short_name": "OM Value CRM",
+  "description": "Leads, follow-ups, site visits and bookings for the OM Value Homes sales team.",
+  "id": "/",
+  "start_url": "/dashboard",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#ffffff",
+  "theme_color": "#0a2d8f",
+  "categories": ["business", "productivity"],
+  "icons": [
+    { "src": "/icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/icons/maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    { "name": "Add lead", "url": "/leads/new" },
+    { "name": "Follow-ups", "url": "/followups" }
+  ]
+}

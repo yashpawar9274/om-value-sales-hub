@@ -73,6 +73,7 @@ export function LeadForm({
   submitting,
   submitLabel,
   duplicateWarning,
+  canAssign = true,
 }: {
   value: LeadFormValues;
   onChange: (next: LeadFormValues) => void;
@@ -80,16 +81,19 @@ export function LeadForm({
   submitting: boolean;
   submitLabel: string;
   duplicateWarning?: string | null | undefined;
+  canAssign?: boolean;
 }) {
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   const { data: team = [] } = useQuery({
     queryKey: ["team"],
+    enabled: canAssign,
     queryFn: async () => {
       const { data } = await supabase.from("profiles").select("id, full_name, email").order("full_name");
       return data ?? [];
     },
   });
+
 
   const set = (patch: Partial<LeadFormValues>) => onChange({ ...value, ...patch });
 
@@ -197,21 +201,24 @@ export function LeadForm({
             </SelectContent>
           </Select>
         </Field>
-        <Field label="Assigned executive">
-          <Select value={value.assigned_to || "unassigned"} onValueChange={(v) => set({ assigned_to: v === "unassigned" ? "" : v })}>
-            <SelectTrigger>
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="unassigned">Unassigned</SelectItem>
-              {team.map((t) => (
-                <SelectItem key={t.id} value={t.id}>
-                  {t.full_name || t.email || "Team member"}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </Field>
+        {canAssign ? (
+          <Field label="Assigned executive">
+            <Select value={value.assigned_to || "unassigned"} onValueChange={(v) => set({ assigned_to: v === "unassigned" ? "" : v })}>
+              <SelectTrigger>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="unassigned">Unassigned</SelectItem>
+                {team.map((t) => (
+                  <SelectItem key={t.id} value={t.id}>
+                    {t.full_name || t.email || "Team member"}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </Field>
+        ) : null}
+
         <div className="sm:col-span-2">
           <Field label="Location / area">
             <Input value={value.location} maxLength={160} onChange={(e) => set({ location: e.target.value })} />

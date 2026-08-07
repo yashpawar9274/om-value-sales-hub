@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/hooks/useAuth";
 import {
   LEAD_PRIORITIES,
   LEAD_SOURCES,
@@ -35,10 +36,28 @@ export const Route = createFileRoute("/_authenticated/leads/")({
 });
 
 function LeadsPage() {
+  const { isManager } = useAuth();
   const [search, setSearch] = useState("");
   const [status, setStatus] = useState("all");
   const [source, setSource] = useState("all");
   const [priority, setPriority] = useState("all");
+  const [staff, setStaff] = useState("all");
+
+  const { data: team = [] } = useQuery({
+    queryKey: ["team"],
+    queryFn: async () => {
+      const { data } = await supabase.from("profiles").select("id, full_name, email").order("full_name");
+      return data ?? [];
+    },
+  });
+
+  const nameOf = (id: string | null) => {
+    if (!id) return "Unassigned";
+    const p = team.find((t) => t.id === id);
+    return p?.full_name || p?.email || "Team member";
+  };
+
+  const staffOptions = team.map((t) => ({ value: t.id, label: t.full_name || t.email || "Team member" }));
 
   const { data: leads = [], isLoading } = useQuery({
     queryKey: ["leads"],
@@ -55,6 +74,7 @@ function LeadsPage() {
       if (status !== "all" && l.status !== status) return false;
       if (source !== "all" && l.source !== source) return false;
       if (priority !== "all" && l.priority !== priority) return false;
+      if (staff !== "all" && l.created_by !== staff && l.assigned_to !== staff) return false;
       if (!q) return true;
       return (
         l.customer_name.toLowerCase().includes(q) ||
@@ -63,7 +83,7 @@ function LeadsPage() {
         (l.configuration ?? "").toLowerCase().includes(q)
       );
     });
-  }, [leads, search, status, source, priority]);
+  }, [leads, search, status, source, priority, staff]);
 
   function exportCsv() {
     downloadCsv(
@@ -78,6 +98,8 @@ function LeadsPage() {
         Status: labelOf(LEAD_STATUSES, l.status),
         Priority: labelOf(LEAD_PRIORITIES, l.priority),
         Location: l.location ?? "",
+        "Added by": nameOf(l.created_by),
+        "Assigned to": nameOf(l.assigned_to),
         Created: formatDate(l.created_at),
       })),
     );
@@ -110,6 +132,9 @@ function LeadsPage() {
           <FilterSelect value={source} onChange={setSource} placeholder="Source" options={LEAD_SOURCES} />
           <FilterSelect value={priority} onChange={setPriority} placeholder="Priority" options={LEAD_PRIORITIES} />
         </div>
+        {isManager && staffOptions.length > 0 ? (
+          <FilterSelect value={staff} onChange={setStaff} placeholder="Staff" options={staffOptions} />
+        ) : null}
         <div className="flex justify-end">
           <Button size="sm" variant="ghost" onClick={exportCsv} disabled={filtered.length === 0}>
             <Download className="size-4" /> Export CSV
@@ -147,6 +172,9 @@ function LeadsPage() {
                 </p>
                 <p className="mt-0.5 text-xs text-muted-foreground">
                   {labelOf(LEAD_SOURCES, l.source)} · {formatDate(l.created_at)}
+                </p>
+                <p className="mt-1 text-[11px] font-medium text-muted-foreground">
+                  Added by {nameOf(l.created_by)} · Assigned to {nameOf(l.assigned_to)}
                 </p>
               </Link>
               <Button asChild size="icon" variant="outline" className="size-10 shrink-0">
