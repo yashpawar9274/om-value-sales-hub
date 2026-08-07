@@ -88,7 +88,11 @@ export function AppShell({
               <h1 className="text-xl font-bold tracking-tight">{title}</h1>
               {subtitle ? <p className="mt-0.5 text-sm opacity-85">{subtitle}</p> : null}
             </div>
-            {action}
+            <div className="flex shrink-0 items-center gap-2">
+              {action}
+              <NotificationBell />
+            </div>
+
           </div>
 
         </header>
