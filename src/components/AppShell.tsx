@@ -11,7 +11,9 @@ import {
 } from "lucide-react";
 import type { ReactNode } from "react";
 
+import { NotificationBell } from "@/components/NotificationBell";
 import { cn } from "@/lib/utils";
+
 
 const NAV = [
   { to: "/dashboard", label: "Home", icon: LayoutDashboard },
