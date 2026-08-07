@@ -25,11 +25,12 @@ function ReportsPage() {
   const { data } = useQuery({
     queryKey: ["reports"],
     queryFn: async () => {
-      const [leads, bookings] = await Promise.all([
+      const [leads, bookings, team] = await Promise.all([
         supabase.from("leads").select("*"),
-        supabase.from("bookings").select("booking_amount, received_amount, booking_date"),
+        supabase.from("bookings").select("booking_amount, received_amount, booking_date, created_by"),
+        supabase.from("profiles").select("id, full_name, email").order("full_name"),
       ]);
-      return { leads: (leads.data ?? []) as Lead[], bookings: bookings.data ?? [] };
+      return { leads: (leads.data ?? []) as Lead[], bookings: bookings.data ?? [], team: team.data ?? [] };
     },
   });
 
@@ -42,6 +43,26 @@ function ReportsPage() {
   const bySource = LEAD_SOURCES.map((s) => ({ ...s, count: leads.filter((l) => l.source === s.value).length })).filter((s) => s.count > 0);
   const byStatus = LEAD_STATUSES.map((s) => ({ ...s, count: leads.filter((l) => l.status === s.value).length })).filter((s) => s.count > 0);
   const max = Math.max(1, ...bySource.map((s) => s.count));
+
+  const team = data?.team ?? [];
+  const byStaff = team
+    .map((t) => {
+      const added = leads.filter((l) => l.created_by === t.id);
+      const owned = leads.filter((l) => l.assigned_to === t.id);
+      const booked = owned.filter((l) => l.status === "booked").length;
+      const value = bookings.filter((b) => b.created_by === t.id).reduce((s, b) => s + Number(b.booking_amount ?? 0), 0);
+      return {
+        id: t.id,
+        name: t.full_name || t.email || "Team member",
+        added: added.length,
+        owned: owned.length,
+        booked,
+        conversion: owned.length ? Math.round((booked / owned.length) * 100) : 0,
+        value,
+      };
+    })
+    .filter((s) => s.added > 0 || s.owned > 0)
+    .sort((a, b) => b.added - a.added);
 
   return (
     <AppShell
@@ -92,6 +113,52 @@ function ReportsPage() {
                   <div className="mt-1 h-2 rounded-full bg-muted">
                     <div className="h-2 rounded-full bg-primary" style={{ width: `${(s.count / max) * 100}%` }} />
                   </div>
+                </li>
+              ))}
+            </ul>
+          )}
+        </SectionCard>
+
+        <SectionCard
+          title="Staff performance"
+          action={
+            byStaff.length > 0 ? (
+              <Button
+                size="sm"
+                variant="ghost"
+                className="h-8 px-2 text-xs"
+                onClick={() =>
+                  downloadCsv(
+                    "staff-report",
+                    byStaff.map((s) => ({
+                      Staff: s.name,
+                      "Leads added": s.added,
+                      "Leads assigned": s.owned,
+                      Booked: s.booked,
+                      "Conversion %": s.conversion,
+                      "Booking value": s.value,
+                    })),
+                  )
+                }
+              >
+                <Download className="size-3.5" /> CSV
+              </Button>
+            ) : null
+          }
+        >
+          {byStaff.length === 0 ? (
+            <p className="text-sm text-muted-foreground">No staff activity yet.</p>
+          ) : (
+            <ul className="divide-y divide-border">
+              {byStaff.map((s) => (
+                <li key={s.id} className="py-3">
+                  <div className="flex items-center justify-between gap-3">
+                    <p className="truncate text-sm font-semibold">{s.name}</p>
+                    <p className="shrink-0 text-sm font-semibold text-primary">{formatCurrency(s.value)}</p>
+                  </div>
+                  <p className="mt-1 text-xs text-muted-foreground">
+                    {s.added} added · {s.owned} assigned · {s.booked} booked · {s.conversion}% conversion
+                  </p>
                 </li>
               ))}
             </ul>
