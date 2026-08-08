@@ -126,13 +126,19 @@ function FormsPage() {
 
   async function toggleActive(id: string, next: boolean) {
     const { error } = await supabase.from("enquiry_forms").update({ is_active: next }).eq("id", id);
-    if (error) return toast.error(error.message);
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
     await queryClient.invalidateQueries({ queryKey: ["enquiry-forms"] });
   }
 
   async function remove(id: string) {
     const { error } = await supabase.from("enquiry_forms").delete().eq("id", id);
-    if (error) return toast.error(error.message);
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
     toast.success("Form deleted");
     await queryClient.invalidateQueries({ queryKey: ["enquiry-forms"] });
   }
