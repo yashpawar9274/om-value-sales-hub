@@ -1,6 +1,6 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { Link, createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { LogOut } from "lucide-react";
+import { BarChart3, ChevronRight, FileText, LogOut, Receipt } from "lucide-react";
 import { toast } from "sonner";
 
 import { AppShell } from "@/components/AppShell";
@@ -48,6 +48,14 @@ function SettingsPage() {
   return (
     <AppShell title="Settings" subtitle="Profile and team">
       <div className="space-y-4">
+        <SectionCard title="Quick links">
+          <ul className="divide-y divide-border">
+            <QuickLink to="/bookings" label="Bookings" icon={Receipt} />
+            <QuickLink to="/reports" label="Reports" icon={BarChart3} />
+            {isManager ? <QuickLink to="/forms" label="Enquiry forms" icon={FileText} /> : null}
+          </ul>
+        </SectionCard>
+
         <SectionCard title="Your profile">
           <dl className="space-y-2 text-sm">
             <Row label="Name" value={profile?.full_name || "—"} />
@@ -82,6 +90,26 @@ function SettingsPage() {
         </Button>
       </div>
     </AppShell>
+  );
+}
+
+function QuickLink({
+  to,
+  label,
+  icon: Icon,
+}: {
+  to: "/bookings" | "/reports" | "/forms";
+  label: string;
+  icon: typeof Receipt;
+}) {
+  return (
+    <li>
+      <Link to={to} className="flex items-center gap-3 py-3 text-sm font-medium">
+        <Icon className="size-4 text-primary" />
+        {label}
+        <ChevronRight className="ml-auto size-4 text-muted-foreground" />
+      </Link>
+    </li>
   );
 }
 
