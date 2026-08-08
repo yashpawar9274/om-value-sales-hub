@@ -1,10 +1,13 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
+import { Plus } from "lucide-react";
 
 import { AppShell } from "@/components/AppShell";
 import { EmptyState, StatusChip } from "@/components/crm-ui";
+import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { PAYMENT_STATUSES, formatCurrency, formatDate, labelOf } from "@/lib/crm";
+
 
 export const Route = createFileRoute("/_authenticated/bookings/")({
   head: () => ({
