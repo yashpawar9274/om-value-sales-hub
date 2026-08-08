@@ -37,13 +37,32 @@ function BookingsPage() {
   const total = data.reduce((sum, b) => sum + Number(b.booking_amount ?? 0), 0);
 
   return (
-    <AppShell title="Bookings" subtitle={`${data.length} bookings · ${formatCurrency(total)}`}>
+    <AppShell
+      title="Bookings"
+      subtitle={`${data.length} bookings · ${formatCurrency(total)}`}
+      action={
+        <Button asChild size="sm" variant="secondary" className="font-semibold">
+          <Link to="/bookings/new">
+            <Plus className="size-4" /> Booking
+          </Link>
+        </Button>
+      }
+    >
       <div className="space-y-2.5">
         {isLoading ? (
           <p className="py-8 text-center text-sm text-muted-foreground">Loading…</p>
         ) : data.length === 0 ? (
-          <EmptyState title="No bookings yet" description="Bookings appear here once a lead converts." />
+          <EmptyState
+            title="No bookings yet"
+            description="Purani ya nayi booking yahan add kijiye."
+            action={
+              <Button asChild size="sm" className="mt-2">
+                <Link to="/bookings/new">Add booking</Link>
+              </Button>
+            }
+          />
         ) : (
+
           data.map((b) => {
             const lead = b.leads as { customer_name: string } | null;
             return (
