@@ -126,6 +126,87 @@ export type Database = {
           },
         ]
       }
+      enquiry_forms: {
+        Row: {
+          created_at: string
+          created_by: string
+          description: string | null
+          fields: Json
+          id: string
+          is_active: boolean
+          slug: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          created_by: string
+          description?: string | null
+          fields?: Json
+          id?: string
+          is_active?: boolean
+          slug: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string
+          description?: string | null
+          fields?: Json
+          id?: string
+          is_active?: boolean
+          slug?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      enquiry_submissions: {
+        Row: {
+          created_at: string
+          customer_name: string
+          data: Json
+          form_id: string | null
+          id: string
+          lead_id: string | null
+          mobile: string
+        }
+        Insert: {
+          created_at?: string
+          customer_name: string
+          data?: Json
+          form_id?: string | null
+          id?: string
+          lead_id?: string | null
+          mobile: string
+        }
+        Update: {
+          created_at?: string
+          customer_name?: string
+          data?: Json
+          form_id?: string | null
+          id?: string
+          lead_id?: string | null
+          mobile?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "enquiry_submissions_form_id_fkey"
+            columns: ["form_id"]
+            isOneToOne: false
+            referencedRelation: "enquiry_forms"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "enquiry_submissions_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "leads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       follow_ups: {
         Row: {
           assigned_to: string | null
