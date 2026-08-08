@@ -18,11 +18,13 @@ import { Route as AuthenticatedFollowupsRouteImport } from './routes/_authentica
 import { Route as AuthenticatedReportsRouteImport } from './routes/_authenticated/reports'
 import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings'
 import { Route as AuthenticatedVisitsRouteImport } from './routes/_authenticated/visits'
+import { Route as EnquirySlugRouteImport } from './routes/enquiry.$slug'
 import { Route as AuthenticatedBookingsIndexRouteImport } from './routes/_authenticated/bookings/index'
 import { Route as AuthenticatedBookingsNewRouteImport } from './routes/_authenticated/bookings/new'
 import { Route as AuthenticatedLeadsIndexRouteImport } from './routes/_authenticated/leads/index'
 import { Route as AuthenticatedLeadsLeadIdRouteImport } from './routes/_authenticated/leads/$leadId'
 import { Route as AuthenticatedLeadsNewRouteImport } from './routes/_authenticated/leads/new'
+import { Route as ApiPublicEnquirySlugRouteImport } from './routes/api/public/enquiry.$slug'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -68,6 +70,11 @@ const AuthenticatedVisitsRoute = AuthenticatedVisitsRouteImport.update({
   path: '/visits',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const EnquirySlugRoute = EnquirySlugRouteImport.update({
+  id: '/enquiry/$slug',
+  path: '/enquiry/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthenticatedBookingsIndexRoute =
   AuthenticatedBookingsIndexRouteImport.update({
     id: '/bookings/',
@@ -96,6 +103,11 @@ const AuthenticatedLeadsNewRoute = AuthenticatedLeadsNewRouteImport.update({
   path: '/leads/new',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const ApiPublicEnquirySlugRoute = ApiPublicEnquirySlugRouteImport.update({
+  id: '/api/public/enquiry/$slug',
+  path: '/api/public/enquiry/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -106,11 +118,13 @@ export interface FileRoutesByFullPath {
   '/reports': typeof AuthenticatedReportsRoute
   '/settings': typeof AuthenticatedSettingsRoute
   '/visits': typeof AuthenticatedVisitsRoute
+  '/enquiry/$slug': typeof EnquirySlugRoute
   '/bookings/new': typeof AuthenticatedBookingsNewRoute
   '/leads/$leadId': typeof AuthenticatedLeadsLeadIdRoute
   '/leads/new': typeof AuthenticatedLeadsNewRoute
   '/bookings/': typeof AuthenticatedBookingsIndexRoute
   '/leads/': typeof AuthenticatedLeadsIndexRoute
+  '/api/public/enquiry/$slug': typeof ApiPublicEnquirySlugRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -121,11 +135,13 @@ export interface FileRoutesByTo {
   '/reports': typeof AuthenticatedReportsRoute
   '/settings': typeof AuthenticatedSettingsRoute
   '/visits': typeof AuthenticatedVisitsRoute
+  '/enquiry/$slug': typeof EnquirySlugRoute
   '/bookings/new': typeof AuthenticatedBookingsNewRoute
   '/leads/$leadId': typeof AuthenticatedLeadsLeadIdRoute
   '/leads/new': typeof AuthenticatedLeadsNewRoute
   '/bookings': typeof AuthenticatedBookingsIndexRoute
   '/leads': typeof AuthenticatedLeadsIndexRoute
+  '/api/public/enquiry/$slug': typeof ApiPublicEnquirySlugRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -138,11 +154,13 @@ export interface FileRoutesById {
   '/_authenticated/reports': typeof AuthenticatedReportsRoute
   '/_authenticated/settings': typeof AuthenticatedSettingsRoute
   '/_authenticated/visits': typeof AuthenticatedVisitsRoute
+  '/enquiry/$slug': typeof EnquirySlugRoute
   '/_authenticated/bookings/new': typeof AuthenticatedBookingsNewRoute
   '/_authenticated/leads/$leadId': typeof AuthenticatedLeadsLeadIdRoute
   '/_authenticated/leads/new': typeof AuthenticatedLeadsNewRoute
   '/_authenticated/bookings/': typeof AuthenticatedBookingsIndexRoute
   '/_authenticated/leads/': typeof AuthenticatedLeadsIndexRoute
+  '/api/public/enquiry/$slug': typeof ApiPublicEnquirySlugRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -155,11 +173,13 @@ export interface FileRouteTypes {
     | '/reports'
     | '/settings'
     | '/visits'
+    | '/enquiry/$slug'
     | '/bookings/new'
     | '/leads/$leadId'
     | '/leads/new'
     | '/bookings/'
     | '/leads/'
+    | '/api/public/enquiry/$slug'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -170,11 +190,13 @@ export interface FileRouteTypes {
     | '/reports'
     | '/settings'
     | '/visits'
+    | '/enquiry/$slug'
     | '/bookings/new'
     | '/leads/$leadId'
     | '/leads/new'
     | '/bookings'
     | '/leads'
+    | '/api/public/enquiry/$slug'
   id:
     | '__root__'
     | '/'
@@ -186,11 +208,13 @@ export interface FileRouteTypes {
     | '/_authenticated/reports'
     | '/_authenticated/settings'
     | '/_authenticated/visits'
+    | '/enquiry/$slug'
     | '/_authenticated/bookings/new'
     | '/_authenticated/leads/$leadId'
     | '/_authenticated/leads/new'
     | '/_authenticated/bookings/'
     | '/_authenticated/leads/'
+    | '/api/public/enquiry/$slug'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -198,6 +222,8 @@ export interface RootRouteChildren {
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AuthRoute: typeof AuthRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
+  EnquirySlugRoute: typeof EnquirySlugRoute
+  ApiPublicEnquirySlugRoute: typeof ApiPublicEnquirySlugRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -265,6 +291,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedVisitsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/enquiry/$slug': {
+      id: '/enquiry/$slug'
+      path: '/enquiry/$slug'
+      fullPath: '/enquiry/$slug'
+      preLoaderRoute: typeof EnquirySlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_authenticated/bookings/': {
       id: '/_authenticated/bookings/'
       path: '/bookings'
@@ -299,6 +332,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/leads/new'
       preLoaderRoute: typeof AuthenticatedLeadsNewRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/api/public/enquiry/$slug': {
+      id: '/api/public/enquiry/$slug'
+      path: '/api/public/enquiry/$slug'
+      fullPath: '/api/public/enquiry/$slug'
+      preLoaderRoute: typeof ApiPublicEnquirySlugRouteImport
+      parentRoute: typeof rootRouteImport
     }
   }
 }
@@ -337,6 +377,8 @@ const rootRouteChildren: RootRouteChildren = {
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AuthRoute: AuthRoute,
   ResetPasswordRoute: ResetPasswordRoute,
+  EnquirySlugRoute: EnquirySlugRoute,
+  ApiPublicEnquirySlugRoute: ApiPublicEnquirySlugRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
