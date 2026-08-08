@@ -6,7 +6,7 @@ import { EmptyState, StatusChip } from "@/components/crm-ui";
 import { supabase } from "@/integrations/supabase/client";
 import { PAYMENT_STATUSES, formatCurrency, formatDate, labelOf } from "@/lib/crm";
 
-export const Route = createFileRoute("/_authenticated/bookings")({
+export const Route = createFileRoute("/_authenticated/bookings/")({
   head: () => ({
     meta: [
       { title: "Bookings — OM Value Homes CRM" },
