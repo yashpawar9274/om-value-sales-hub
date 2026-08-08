@@ -5,6 +5,7 @@ import {
   ChevronLeft,
   LayoutDashboard,
   MapPin,
+  FileText,
   Receipt,
   Settings,
   Users,
@@ -12,6 +13,7 @@ import {
 import type { ReactNode } from "react";
 
 import { NotificationBell } from "@/components/NotificationBell";
+import { VoiceAssistant } from "@/components/VoiceAssistant";
 import { cn } from "@/lib/utils";
 
 
@@ -29,6 +31,7 @@ const DESKTOP_NAV = [
   { to: "/followups", label: "Follow-ups", icon: CalendarCheck },
   { to: "/visits", label: "Site Visits", icon: MapPin },
   { to: "/bookings", label: "Bookings", icon: Receipt },
+  { to: "/forms", label: "Enquiry Forms", icon: FileText },
   { to: "/reports", label: "Reports", icon: BarChart3 },
   { to: "/settings", label: "Settings", icon: Settings },
 ] as const;
@@ -43,7 +46,7 @@ export function AppShell({
   title: string;
   subtitle?: string | undefined;
   action?: ReactNode;
-  back?: "/dashboard" | "/leads" | "/followups" | "/visits" | "/bookings" | "/reports" | "/settings" | undefined;
+  back?: "/dashboard" | "/leads" | "/followups" | "/visits" | "/bookings" | "/forms" | "/reports" | "/settings" | undefined;
   children: ReactNode;
 }) {
 
@@ -129,6 +132,8 @@ export function AppShell({
           })}
         </div>
       </nav>
+
+      <VoiceAssistant />
     </div>
   );
 }
